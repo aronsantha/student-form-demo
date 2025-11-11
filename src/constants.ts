@@ -96,15 +96,10 @@ export const SUBJECTS: Subject[] = [
 
   // Universal subjects
   { id: 21, name: "Introduction to Research" },
-  { id: 22, name: "Ethics & Professional Practice" },
+  { id: 22, name: "Ethics" },
   { id: 23, name: "Communication Skills" },
-  { id: 24, name: "Project Management Basics" },
-  { id: 25, name: "Statistics I" },
-  { id: 26, name: "Critical Thinking" },
-  { id: 27, name: "Introduction to Technology" },
-  { id: 28, name: "Leadership & Teamwork" },
-  { id: 29, name: "Research Writing" },
-  { id: 30, name: "Entrepreneurship Basics" },
+  { id: 24, name: "Statistics" },
+  { id: 25, name: "Leadership & Teamwork" },
 ];
 
 export const INITIAL_SUBJECT_PREFERENCES: { [key: number]: boolean } = {

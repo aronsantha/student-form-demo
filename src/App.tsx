@@ -6,15 +6,29 @@ function App() {
   const [enrolledStudents, setEnrolledStudents] = useState([]);
   const [name, setName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState(COURSES[0].name);
+  const [selectedCourse, setSelectedCourse] = useState(COURSES[0]);
   const [subjectPreferenceMap, setSubjectPreferenceMap] = useState(
     INITIAL_SUBJECT_PREFERENCES,
   );
+
+  function handleChangeCourse(event: React.ChangeEvent<HTMLInputElement>) {
+    const selectedCourseId = event.target.value;
+    const courseObj = COURSES.find((course) => course.id === selectedCourseId);
+    if (!courseObj) return;
+    setSelectedCourse(courseObj);
+  }
+
+  const relevantSubjects = selectedCourse
+    ? SUBJECTS.filter((subject) =>
+        selectedCourse["subjectIds"].includes(subject.id),
+      )
+    : [];
 
   return (
     <>
       <div className="m-10 mx-auto w-full max-w-[80vw] rounded-lg bg-white p-10 shadow-lg">
         <h1 className="mb-10 text-2xl font-bold">Student enrollment</h1>
+        <pre>{JSON.stringify(selectedCourse, null, 2)}</pre>
         <div className="h-fullflex-row flex gap-3">
           <div className="grow rounded bg-neutral-100 p-6">
             <div className="mb-5">
@@ -66,10 +80,10 @@ function App() {
                       type="radio"
                       name="current-course"
                       id={course.id}
-                      value={course.name}
-                      checked={course.name === selectedCourse}
+                      value={course.id}
+                      checked={course.id === selectedCourse.id}
                       onChange={(event) => {
-                        setSelectedCourse(event.target.value);
+                        handleChangeCourse(event);
                       }}
                     />
                     <label htmlFor={course.id}>{course.name}</label>
@@ -82,7 +96,7 @@ function App() {
                   Select 3 or more subjects:
                 </legend>
 
-                {SUBJECTS.map((subject) => (
+                {relevantSubjects.map((subject) => (
                   <div key={subject.id} className="flex items-center gap-2">
                     <input
                       type="checkbox"
