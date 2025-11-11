@@ -6,7 +6,7 @@ import {
   INITIAL_SUBJECT_PREFERENCES,
   DUMMY_STUDENTS,
 } from "./constants";
-import { Student } from "./types";
+import { Student, SubmitStatus, FormStatus } from "./types";
 
 function App() {
   const [enrolledStudents, setEnrolledStudents] =
@@ -17,8 +17,8 @@ function App() {
   const [subjectPreferenceMap, setSubjectPreferenceMap] = useState(
     INITIAL_SUBJECT_PREFERENCES,
   );
-  const [submitStatus, setSubmitStatus] = useState("IDLE");
-  const [formStatus, setFormStatus] = useState("NEW");
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("IDLE");
+  const [formStatus, setFormStatus] = useState<FormStatus>("NEW");
 
   function handleChangeCourse(event: React.ChangeEvent<HTMLSelectElement>) {
     const selectedCourseId = event.target.value;
@@ -34,6 +34,12 @@ function App() {
     );
   }
 
+  // function getAllStudentEmails() {
+  //   return enrolledStudents.length === 0
+  //     ? []
+  //     : enrolledStudents.map((student) => student.email);
+  // }
+
   function resetForm() {
     setName("");
     setEmailAddress("");
@@ -45,6 +51,8 @@ function App() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitStatus("LOADING");
+
+    console.log(submitStatus);
 
     const newStudent: Student = {
       name,
@@ -99,7 +107,7 @@ function App() {
     <>
       <div className="m-10 mx-auto w-full max-w-[80vw] rounded-lg bg-white p-10 shadow-lg">
         <h1 className="mb-10 text-2xl font-bold">Student enrollment</h1>
-        <div className="h-fullflex-row flex gap-3">
+        <div className="flex h-full flex-row gap-3">
           <div className="grow rounded bg-neutral-100 p-6">
             <div className="mb-5">
               <h2 className="text-xl font-bold">{stringMap.title}</h2>
@@ -207,9 +215,9 @@ function App() {
               </div>
             ) : (
               <div>
-                {enrolledStudents.map((student, index) => (
+                {enrolledStudents.map((student) => (
                   <div
-                    key={index}
+                    key={student.email}
                     className="mb-4 rounded border border-neutral-300 p-4"
                   >
                     <h3 className="mb-3 font-bold">{student.name}</h3>

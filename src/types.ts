@@ -15,3 +15,6 @@ export interface Student {
   course: Course;
   subjects: Subject[];
 }
+
+export type SubmitStatus = "IDLE" | "LOADING" | "ERROR";
+export type FormStatus = "NEW" | "EDIT";
