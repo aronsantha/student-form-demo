@@ -1,17 +1,24 @@
 import React from "react";
 import { useState } from "react";
-import { COURSES, SUBJECTS, INITIAL_SUBJECT_PREFERENCES } from "./constants";
+import {
+  COURSES,
+  SUBJECTS,
+  INITIAL_SUBJECT_PREFERENCES,
+  DUMMY_STUDENTS,
+} from "./constants";
 import { Student } from "./types";
 
 function App() {
-  const [enrolledStudents, setEnrolledStudents] = useState<Student[]>([]);
+  const [enrolledStudents, setEnrolledStudents] =
+    useState<Student[]>(DUMMY_STUDENTS);
   const [name, setName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(COURSES[0]);
   const [subjectPreferenceMap, setSubjectPreferenceMap] = useState(
     INITIAL_SUBJECT_PREFERENCES,
   );
-  const [submitStatus, setSubmitStatus] = useState("idle");
+  const [submitStatus, setSubmitStatus] = useState("IDLE");
+  const [formStatus, setFormStatus] = useState("NEW");
 
   function handleChangeCourse(event: React.ChangeEvent<HTMLSelectElement>) {
     const selectedCourseId = event.target.value;
@@ -27,20 +34,36 @@ function App() {
     );
   }
 
+  function resetForm() {
+    setName("");
+    setEmailAddress("");
+    setSelectedCourse(COURSES[0]);
+    setSubjectPreferenceMap(INITIAL_SUBJECT_PREFERENCES);
+    setSubmitStatus("IDLE");
+  }
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitStatus("loading");
+    setSubmitStatus("LOADING");
 
     const newStudent: Student = {
       name,
       email: emailAddress,
-      course: selectedCourse.name,
+      course: selectedCourse,
       subjects: getSelectedSubjects(),
     };
 
     setTimeout(() => {
-      setEnrolledStudents((prev) => [...prev, newStudent]);
-      setSubmitStatus("idle");
+      setEnrolledStudents((prev) =>
+        formStatus === "NEW"
+          ? [...prev, newStudent]
+          : prev.map((student) =>
+              student.email === emailAddress ? newStudent : student,
+            ),
+      );
+
+      resetForm();
+      setFormStatus("NEW");
     }, 1000);
   }
 
@@ -50,6 +73,28 @@ function App() {
       )
     : [];
 
+  const stringMap =
+    formStatus === "NEW"
+      ? {
+          title: "Register new student",
+          button: "Register",
+        }
+      : {
+          title: "Edit student",
+          button: "Save",
+        };
+
+  function handleSelectStudentForEdit(student: Student): void {
+    resetForm();
+    const savedSubjects = { ...INITIAL_SUBJECT_PREFERENCES };
+    student.subjects.forEach((subject) => (savedSubjects[subject.id] = true));
+
+    setFormStatus("EDIT");
+    setName(student.name);
+    setEmailAddress(student.email);
+    setSelectedCourse(student.course);
+    setSubjectPreferenceMap(savedSubjects);
+  }
   return (
     <>
       <div className="m-10 mx-auto w-full max-w-[80vw] rounded-lg bg-white p-10 shadow-lg">
@@ -57,7 +102,7 @@ function App() {
         <div className="h-fullflex-row flex gap-3">
           <div className="grow rounded bg-neutral-100 p-6">
             <div className="mb-5">
-              <h2 className="text-xl font-bold">Register</h2>
+              <h2 className="text-xl font-bold">{stringMap.title}</h2>
               <p className="text-xs text-neutral-600">
                 Fill in and submit the form to register yourself
               </p>
@@ -140,15 +185,15 @@ function App() {
                 className="w-fit rounded bg-emerald-600 px-12 py-2 text-white hover:bg-emerald-700"
                 aria-label="Register a new student"
               >
-                {submitStatus === "idle" && <div>Register</div>}
-                {submitStatus === "loading" && <div>Loading...</div>}
+                {submitStatus === "IDLE" && <div>{stringMap.button}</div>}
+                {submitStatus === "LOADING" && <div>Saving...</div>}
               </button>
             </form>
           </div>
 
           <div className="min-w-[30%] max-w-[50%] rounded p-4">
             <div className="mb-5">
-              <h2 className="text-xl font-bold">Enrolled students</h2>
+              <h2 className="text-xl font-bold">ENROLLED STUDENTS</h2>
               <p className="text-xs text-neutral-600">
                 See and edit enrolled students.
               </p>
@@ -162,7 +207,30 @@ function App() {
               </div>
             ) : (
               <div>
-                <pre>{JSON.stringify(enrolledStudents, null, 2)}</pre>
+                {enrolledStudents.map((student, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 rounded border border-neutral-300 p-4"
+                  >
+                    <h3 className="mb-3 font-bold">{student.name}</h3>
+                    <div className="text-sm text-neutral-700">
+                      <p>Email: {student.email}</p>
+                      <p>Course: {student.course.name}</p>
+                      <p>Subjects:</p>
+                      <ul className="list-disc pl-5">
+                        {student.subjects.map((subject) => (
+                          <li key={subject.id}>{subject.name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => handleSelectStudentForEdit(student)}
+                      className="mt-4 w-fit rounded bg-emerald-600 px-6 py-2 text-sm text-white hover:bg-emerald-700"
+                    >
+                      Edit student
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
           </div>

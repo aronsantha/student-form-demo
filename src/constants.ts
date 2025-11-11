@@ -1,55 +1,55 @@
-import { Course, Subject } from "./types";
+import { Course, Subject, Student } from "./types";
 
 export const COURSES: Course[] = [
   {
     id: "com",
     name: "Computer Science",
-    subjectIds: [1, 2, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [1, 2, 21, 22, 23, 24, 25],
   },
   {
     id: "bus",
     name: "Business Administration",
-    subjectIds: [3, 4, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [3, 4, 21, 22, 23, 24, 25],
   },
   {
     id: "des",
     name: "Design",
-    subjectIds: [5, 6, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [5, 6, 21, 22, 23, 24, 25],
   },
   {
     id: "psy",
     name: "Psychology",
-    subjectIds: [7, 8, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [7, 8, 21, 22, 23, 24, 25],
   },
   {
     id: "eng",
     name: "Engineering",
-    subjectIds: [9, 10, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [9, 10, 21, 22, 23, 24, 25],
   },
   {
     id: "hos",
     name: "Hospitality",
-    subjectIds: [11, 12, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [11, 12, 21, 22, 23, 24, 25],
   },
   {
     id: "bio",
     name: "Biology",
-    subjectIds: [13, 14, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [13, 14, 21, 22, 23, 24, 25],
   },
   {
     id: "art",
     name: "Art",
-    subjectIds: [15, 16, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [15, 16, 21, 22, 23, 24, 25],
   },
   {
     id: "med",
     name: "Medicine",
-    subjectIds: [17, 18, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [17, 18, 21, 22, 23, 24, 25],
   },
   {
     id: "law",
     name: "Law",
-    subjectIds: [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    subjectIds: [19, 20, 21, 22, 23, 24, 25],
   },
 ];
 
@@ -119,9 +119,49 @@ export const INITIAL_SUBJECT_PREFERENCES: { [key: number]: boolean } = {
   23: false,
   24: false,
   25: false,
-  26: false,
-  27: false,
-  28: false,
-  29: false,
-  30: false,
 };
+
+export const DUMMY_STUDENTS: Student[] = [
+  {
+    name: "Paul Edwards",
+    email: "paul@email.com",
+    course: {
+      id: "com",
+      name: "Computer Science",
+      subjectIds: [1, 2, 21, 22, 23, 24, 25],
+    },
+    subjects: [
+      { id: 1, name: "Data Structures" },
+      { id: 2, name: "Operating Systems" },
+      { id: 21, name: "Introduction to Research" },
+    ],
+  },
+  {
+    name: "Tom Highland",
+    email: "tom@email.com",
+    course: {
+      id: "med",
+      name: "Medicine",
+      subjectIds: [17, 18, 21, 22, 23, 24, 25],
+    },
+    subjects: [
+      { id: 18, name: "Physiology" },
+      { id: 24, name: "Statistics" },
+      { id: 25, name: "Leadership & Teamwork" },
+    ],
+  },
+  {
+    name: "Rosa Park",
+    email: "rosa@email.com",
+    course: {
+      id: "des",
+      name: "Design",
+      subjectIds: [5, 6, 21, 22, 23, 24, 25],
+    },
+    subjects: [
+      { id: 23, name: "Communication Skills" },
+      { id: 24, name: "Statistics" },
+      { id: 25, name: "Leadership & Teamwork" },
+    ],
+  },
+];

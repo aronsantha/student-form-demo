@@ -12,6 +12,6 @@ export interface Course {
 export interface Student {
   name: string;
   email: string;
-  course: string;
+  course: Course;
   subjects: Subject[];
 }
