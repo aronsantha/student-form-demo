@@ -11,11 +11,12 @@ function App() {
     INITIAL_SUBJECT_PREFERENCES,
   );
 
-  function handleChangeCourse(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleChangeCourse(event: React.ChangeEvent<HTMLSelectElement>) {
     const selectedCourseId = event.target.value;
     const courseObj = COURSES.find((course) => course.id === selectedCourseId);
     if (!courseObj) return;
     setSelectedCourse(courseObj);
+    setSubjectPreferenceMap(INITIAL_SUBJECT_PREFERENCES);
   }
 
   const relevantSubjects = selectedCourse
@@ -73,22 +74,20 @@ function App() {
 
               <fieldset className="rounded border border-neutral-300 bg-white p-5">
                 <legend className="px-3 text-xs">Select course</legend>
-
-                {COURSES.map((course) => (
-                  <div key={course.name} className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="current-course"
-                      id={course.id}
-                      value={course.id}
-                      checked={course.id === selectedCourse.id}
-                      onChange={(event) => {
-                        handleChangeCourse(event);
-                      }}
-                    />
-                    <label htmlFor={course.id}>{course.name}</label>
-                  </div>
-                ))}
+                <select
+                  className="min-w-[400px] rounded border p-2"
+                  id="course-select"
+                  value={selectedCourse.id}
+                  onChange={(event) => {
+                    handleChangeCourse(event);
+                  }}
+                >
+                  {COURSES.map((course) => (
+                    <option key={course.id} value={course.id}>
+                      {course.name}
+                    </option>
+                  ))}
+                </select>
               </fieldset>
 
               <fieldset className="rounded border border-neutral-300 bg-white p-5">
