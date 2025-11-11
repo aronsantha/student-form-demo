@@ -1,6 +1,17 @@
-export const courses = [
+export interface Subject {
+  id: number;
+  name: string;
+}
+
+export interface Course {
+  id: string;
+  name: string;
+  subjectIds: number[];
+}
+
+export const COURSES: Course[] = [
   {
-    id: "cs",
+    id: "com",
     name: "Computer Science",
     subjectIds: [1, 2, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
   },
@@ -51,7 +62,7 @@ export const courses = [
   },
 ];
 
-export const subjects = [
+export const SUBJECTS: Subject[] = [
   // Course-specific subjects
   { id: 1, name: "Data Structures" },
   { id: 2, name: "Operating Systems" },
@@ -95,3 +106,36 @@ export const subjects = [
   { id: 29, name: "Research Writing" },
   { id: 30, name: "Entrepreneurship Basics" },
 ];
+
+export const INITIAL_SUBJECT_PREFERENCES: { [key: number]: boolean } = {
+  1: false,
+  2: false,
+  3: false,
+  4: false,
+  5: false,
+  6: false,
+  7: false,
+  8: false,
+  9: false,
+  10: false,
+  11: false,
+  12: false,
+  13: false,
+  14: false,
+  15: false,
+  16: false,
+  17: false,
+  18: false,
+  19: false,
+  20: false,
+  21: false,
+  22: false,
+  23: false,
+  24: false,
+  25: false,
+  26: false,
+  27: false,
+  28: false,
+  29: false,
+  30: false,
+};
