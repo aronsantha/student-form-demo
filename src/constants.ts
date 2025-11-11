@@ -1,13 +1,4 @@
-export interface Subject {
-  id: number;
-  name: string;
-}
-
-export interface Course {
-  id: string;
-  name: string;
-  subjectIds: number[];
-}
+import { Course, Subject } from "./types";
 
 export const COURSES: Course[] = [
   {

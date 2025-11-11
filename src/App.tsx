@@ -1,15 +1,17 @@
 import React from "react";
 import { useState } from "react";
 import { COURSES, SUBJECTS, INITIAL_SUBJECT_PREFERENCES } from "./constants";
+import { Student } from "./types";
 
 function App() {
-  const [enrolledStudents, setEnrolledStudents] = useState([]);
+  const [enrolledStudents, setEnrolledStudents] = useState<Student[]>([]);
   const [name, setName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(COURSES[0]);
   const [subjectPreferenceMap, setSubjectPreferenceMap] = useState(
     INITIAL_SUBJECT_PREFERENCES,
   );
+  const [submitStatus, setSubmitStatus] = useState("idle");
 
   function handleChangeCourse(event: React.ChangeEvent<HTMLSelectElement>) {
     const selectedCourseId = event.target.value;
@@ -17,6 +19,29 @@ function App() {
     if (!courseObj) return;
     setSelectedCourse(courseObj);
     setSubjectPreferenceMap(INITIAL_SUBJECT_PREFERENCES);
+  }
+
+  function getSelectedSubjects() {
+    return SUBJECTS.filter(
+      (subject) => subjectPreferenceMap[subject.id] === true,
+    );
+  }
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitStatus("loading");
+
+    const newStudent: Student = {
+      name,
+      email: emailAddress,
+      course: selectedCourse.name,
+      subjects: getSelectedSubjects(),
+    };
+
+    setTimeout(() => {
+      setEnrolledStudents((prev) => [...prev, newStudent]);
+      setSubmitStatus("idle");
+    }, 1000);
   }
 
   const relevantSubjects = selectedCourse
@@ -29,7 +54,6 @@ function App() {
     <>
       <div className="m-10 mx-auto w-full max-w-[80vw] rounded-lg bg-white p-10 shadow-lg">
         <h1 className="mb-10 text-2xl font-bold">Student enrollment</h1>
-        <pre>{JSON.stringify(selectedCourse, null, 2)}</pre>
         <div className="h-fullflex-row flex gap-3">
           <div className="grow rounded bg-neutral-100 p-6">
             <div className="mb-5">
@@ -40,9 +64,7 @@ function App() {
             </div>
 
             <form
-              onSubmit={(event) => {
-                event.preventDefault();
-              }}
+              onSubmit={handleSubmit}
               className="flex w-full flex-col gap-5"
             >
               <div className="flex w-full flex-col-reverse gap-1">
@@ -113,6 +135,14 @@ function App() {
                   </div>
                 ))}
               </fieldset>
+              <button
+                type="submit"
+                className="w-fit rounded bg-emerald-600 px-12 py-2 text-white hover:bg-emerald-700"
+                aria-label="Register a new student"
+              >
+                {submitStatus === "idle" && <div>Register</div>}
+                {submitStatus === "loading" && <div>Loading...</div>}
+              </button>
             </form>
           </div>
 
@@ -131,7 +161,9 @@ function App() {
                 </p>
               </div>
             ) : (
-              <div>{enrolledStudents}</div>
+              <div>
+                <pre>{JSON.stringify(enrolledStudents, null, 2)}</pre>
+              </div>
             )}
           </div>
         </div>
