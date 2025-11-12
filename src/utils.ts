@@ -1,5 +1,5 @@
 import { EMAIL_REGEX } from "./constants";
-import { Student, ValidationErrors } from "./types";
+import { FormStatus, Student, ValidationErrors } from "./types";
 
 function getAllStudentEmails(students: Student[]) {
   return students.length === 0 ? [] : students.map((student) => student.email);
@@ -8,6 +8,7 @@ function getAllStudentEmails(students: Student[]) {
 export function getValidationErrors(
   student: Student,
   enrolledStudents: Student[],
+  status: FormStatus,
 ): ValidationErrors | null {
   const errors: ValidationErrors = {};
 
@@ -19,7 +20,10 @@ export function getValidationErrors(
     errors.email = "Email is required";
   } else if (!EMAIL_REGEX.test(student.email)) {
     errors.email = "Invalid email format";
-  } else if (getAllStudentEmails(enrolledStudents).includes(student.email)) {
+  } else if (
+    status === "NEW" &&
+    getAllStudentEmails(enrolledStudents).includes(student.email)
+  ) {
     errors.email =
       "This email has already been used to create an account. Edit your account on the right side, or create a new one with another email.";
   }
