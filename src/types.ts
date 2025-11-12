@@ -18,3 +18,4 @@ export interface Student {
 
 export type SubmitStatus = "IDLE" | "LOADING" | "ERROR";
 export type FormStatus = "NEW" | "EDIT";
+export type ValidationErrors = Record<string, string>;
